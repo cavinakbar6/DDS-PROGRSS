@@ -1,0 +1,46 @@
+[gd_scene load_steps=8 format=3 uid="uid://ctreseqf8lw84"]
+
+[ext_resource type="Script" uid="uid://c4urdk8aof3hp" path="res://terrain_objects/mobil.gd" id="1_csmvf"]
+[ext_resource type="Texture2D" uid="uid://cncun0kv1khk5" path="res://asset/mobil rush.png" id="2_csmvf"]
+[ext_resource type="AudioStream" uid="uid://ccmflf6d8bekt" path="res://Sound/carhorn.mp3" id="3_csmvf"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5cbxk"]
+transparency = 1
+albedo_texture = ExtResource("2_csmvf")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_7xyg1"]
+material = SubResource("StandardMaterial3D_5cbxk")
+size = Vector2(1, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_7xyg1"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_csmvf"]
+
+[node name="mobil" type="Node3D"]
+transform = Transform3D(1.3685038, 0, 0, 0, 1.1817992, 0, 0, 0, 1, 0, 0, 0)
+script = ExtResource("1_csmvf")
+spawn_chance = 1.0
+spawn_x_range = Vector2(0.15, 0.85)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(2.4453554, 0, 0, 0, -4.3711392e-08, -3.7964451, 0, 1.0000001, -1.6594788e-07, 0, 0.6608716, 0)
+mesh = SubResource("PlaneMesh_7xyg1")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.52284837, 0, 0, 0, 1, 0, 0.90886295, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(1.248995, 0, 0, 0, 2.9563978, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("BoxShape3D_7xyg1")
+
+[node name="Area3D" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.5792476, 0, 0, 0, 1, 0, 0.86479163, 0)
+disable_mode = 1
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(1.3548254, 0, 0, 0, 2.4271588, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("BoxShape3D_csmvf")
+
+[node name="SpawnSound" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("3_csmvf")
+volume_db = 55.923

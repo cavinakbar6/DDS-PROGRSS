@@ -1,0 +1,45 @@
+[gd_scene load_steps=8 format=3 uid="uid://coiqfg2s3bmdo"]
+
+[ext_resource type="Script" uid="uid://cxluj8narbpw2" path="res://terrain_objects/grandma.gd" id="1_ecnsc"]
+[ext_resource type="Texture2D" uid="uid://b3u8s8m1lfqu1" path="res://asset/nenek.png" id="2_82y0e"]
+[ext_resource type="AudioStream" uid="uid://c2r1spxycstjo" path="res://Sound/grandma.wav" id="3_82y0e"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_82y0e"]
+transparency = 1
+albedo_texture = ExtResource("2_82y0e")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_oo8lk"]
+material = SubResource("StandardMaterial3D_82y0e")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_oo8lk"]
+size = Vector3(1, 1.30774, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_pkufe"]
+size = Vector3(1, 1.30774, 1)
+
+[node name="Grandma" type="Node3D"]
+script = ExtResource("1_ecnsc")
+spawn_chance = 0.01
+spawn_x_range = Vector2(-1, 0.1)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.6144668, 0, 0, 0, -8.74228e-08, -0.874533, 0, 2, -3.8227174e-08, 0, 0.8665688, 0)
+mesh = SubResource("PlaneMesh_oo8lk")
+skeleton = NodePath("../StaticBody3D2")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(1.1610376, 0, 0, 0, 2.16628, 0, 0, 0, 0.5831074, 0, 1.01968, 0)
+shape = SubResource("BoxShape3D_oo8lk")
+
+[node name="Area3D" type="Area3D" parent="."]
+disable_mode = 1
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(1.1048292, 0, 0, 0, 2.16628, 0, 0, 0, 0.5739056, 0, 1.01968, 0)
+shape = SubResource("BoxShape3D_pkufe")
+
+[node name="SpawnSound" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("3_82y0e")
+volume_db = 15.0

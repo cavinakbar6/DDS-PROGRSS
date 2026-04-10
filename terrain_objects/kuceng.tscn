@@ -1,0 +1,43 @@
+[gd_scene load_steps=7 format=3 uid="uid://cmfww20ic1dkn"]
+
+[ext_resource type="Script" uid="uid://c1aqpl4tq73tp" path="res://terrain_objects/kuceng.gd" id="1_4w8fj"]
+[ext_resource type="Texture2D" uid="uid://ca1vk75u7i4st" path="res://asset/kuceng.webp" id="2_m45al"]
+[ext_resource type="AudioStream" uid="uid://c7sdcf1n1egyf" path="res://Sound/cat-meow.wav" id="3_g3cfd"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_idrje"]
+transparency = 1
+albedo_texture = ExtResource("2_m45al")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_pare7"]
+material = SubResource("StandardMaterial3D_idrje")
+size = Vector2(1, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_46osh"]
+size = Vector3(1, 1.30774, 1)
+
+[node name="kuceng" type="Node3D"]
+script = ExtResource("1_4w8fj")
+spawn_chance = 0.2
+spawn_x_range = Vector2(-1, -0.5)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(2, 0, 0, 0, -8.74228e-08, -2, 0, 2, -8.74228e-08, 0, 1, 0)
+mesh = SubResource("PlaneMesh_pare7")
+skeleton = NodePath("../StaticBody3D2")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(1.30724, 0, 0, 0, 2.16628, 0, 0, 0, 1, 0, 1.01968, 0)
+shape = SubResource("BoxShape3D_46osh")
+
+[node name="Area3D" type="Area3D" parent="."]
+disable_mode = 1
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(1.30724, 0, 0, 0, 2.16628, 0, 0, 0, 1, 0, 1.01968, 0)
+shape = SubResource("BoxShape3D_46osh")
+
+[node name="SpawnSound" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("3_g3cfd")
+volume_db = 20.0

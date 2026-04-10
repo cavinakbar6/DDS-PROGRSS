@@ -1,0 +1,46 @@
+[gd_scene load_steps=10 format=3 uid="uid://1l8w78xdj6gf"]
+
+[ext_resource type="Texture2D" uid="uid://bubpoyacsgd8e" path="res://asset/jalan.png" id="1_qeg5n"]
+[ext_resource type="Texture2D" uid="uid://ca1k7w08f0v74" path="res://asset/grass_landscape.jpg" id="2_no5jb"]
+[ext_resource type="Texture2D" uid="uid://cjjxjid2mpdca" path="res://asset/Lampu Jalan.png" id="3_no5jb"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cb1d3"]
+albedo_texture = ExtResource("1_qeg5n")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_ax2tu"]
+material = SubResource("StandardMaterial3D_cb1d3")
+size = Vector2(12, 16)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_oktkr"]
+albedo_color = Color(0.43134022, 0.43134025, 0.43134025, 1)
+albedo_texture = ExtResource("2_no5jb")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_no5jb"]
+material = SubResource("StandardMaterial3D_oktkr")
+size = Vector2(100, 16)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_23qfv"]
+transparency = 1
+depth_draw_mode = 1
+albedo_texture = ExtResource("3_no5jb")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_oktkr"]
+material = SubResource("StandardMaterial3D_23qfv")
+
+[node name="4Lane" type="Node3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 2, 0, 0, -16)
+mesh = SubResource("PlaneMesh_ax2tu")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="MeshInstance3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D/StaticBody3D"]
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 2, 0, -0.1, -16)
+mesh = SubResource("PlaneMesh_no5jb")
+
+[node name="lampu" type="MeshInstance3D" parent="."]
+transform = Transform3D(7.922044, 0, 0, 0, 2.9802319e-08, -8.854469, 0, 0.9999999, 2.6388375e-07, -2.175467, 3.8471923, -30.600002)
+mesh = SubResource("PlaneMesh_oktkr")
