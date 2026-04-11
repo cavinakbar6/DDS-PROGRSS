@@ -2,13 +2,19 @@ extends DirectionalLight3D
 
 @export var day_duration: float = 50.0
 @export var transition_duration: float = 3.0
-@export var night_duration: float = 50.0
+@export var night_duration: float = 40.0
+
+# kontrol gelap malam
+@export var night_min_intensity: float = 0.2
 
 var max_energy: float = 1.0
 var world_env: WorldEnvironment
 var time_passed: float = 0.0
 
-var light_dimness: float = 0.2
+# Warna
+var color_day = Color(1.0, 1.0, 0.95)
+var color_sunset = Color(1.0, 0.5, 0.2)
+var color_night = Color(0.2, 0.3, 0.6)
 
 func _ready() -> void:
 	max_energy = light_energy
@@ -21,29 +27,61 @@ func _process(delta: float) -> void:
 	var t = fmod(time_passed, total_cycle)
 
 	var intensity_factor = 0.0
+	var current_color = color_day
 	
 	# === SIANG ===
 	if t < day_duration:
 		intensity_factor = 1.0
+		current_color = color_day
 	
-	# === SUNSET (terang → gelap) ===
+	# === SUNSET ===
 	elif t < day_duration + transition_duration:
 		var local_t = (t - day_duration) / transition_duration
-		intensity_factor = lerp(1.0, light_dimness, local_t)
+		local_t = smoothstep(0.0, 1.0, local_t)
+		
+		intensity_factor = lerp(1.0, night_min_intensity, local_t)
+		
+		if local_t < 0.5:
+			var t1 = local_t * 2.0
+			current_color = color_day.lerp(color_sunset, t1)
+		else:
+			var t2 = (local_t - 0.5) * 2.0
+			current_color = color_sunset.lerp(color_night, t2)
+	
 	
 	# === MALAM ===
 	elif t < day_duration + transition_duration + night_duration:
-		intensity_factor = light_dimness
+		intensity_factor = night_min_intensity
+		current_color = color_night
 	
-	# === SUNRISE (gelap → terang) ===
+	
+	# === SUNRISE ===
 	else:
 		var local_t = (t - (day_duration + transition_duration + night_duration)) / transition_duration
-		intensity_factor = lerp(light_dimness, 1.0, local_t)
+		local_t = smoothstep(0.0, 1.0, local_t)
+		
+		intensity_factor = lerp(night_min_intensity, 1.0, local_t)
+		
+		if local_t < 0.5:
+			var t1 = local_t * 2.0
+			current_color = color_night.lerp(color_sunset, t1)
+		else:
+			var t2 = (local_t - 0.5) * 2.0
+			current_color = color_sunset.lerp(color_day, t2)
 	
-	# Terapkan ke cahaya (biar nggak pitch black)
-	light_energy = max_energy * max(intensity_factor, light_dimness)
 	
-	# Environment (langit & ambient)
+	# Terapkan cahaya
+	light_energy = max_energy * intensity_factor
+	light_color = current_color
+	
+	# ENVIRONMENT
 	if is_instance_valid(world_env) and world_env.environment != null:
-		world_env.environment.background_energy_multiplier = max(intensity_factor, 0.02)
-		world_env.environment.ambient_light_energy = max(intensity_factor, 0.1)
+		var env = world_env.environment
+		
+		env.background_energy_multiplier = max(intensity_factor, 0.01)
+		env.ambient_light_energy = max(intensity_factor, night_min_intensity)
+		env.ambient_light_color = current_color
+		
+		if env.fog_enabled:
+			env.fog_light_color = current_color
+			env.fog_density = lerp(0.002, 0.01, 1.0 - intensity_factor)
