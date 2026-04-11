@@ -1,40 +1,49 @@
 extends DirectionalLight3D
 
-## Waktu dalam detik untuk 1 siklus siang-malam penuh (Siang -> Siang lagi)
-@export var cycle_duration: float = 60.0
+@export var day_duration: float = 50.0
+@export var transition_duration: float = 3.0
+@export var night_duration: float = 50.0
 
-# Base light energy saat siang
 var max_energy: float = 1.0
 var world_env: WorldEnvironment
+var time_passed: float = 0.0
+
+var light_dimness: float = 0.2
 
 func _ready() -> void:
 	max_energy = light_energy
 	world_env = get_parent().get_node_or_null("WorldEnvironment")
 
 func _process(delta: float) -> void:
-	# Rotasi matahari mengelilingi sumbu X
-	# 360 derajat / cycle_duration
-	var rotation_speed = deg_to_rad(360.0) / cycle_duration
-	rotate_x(-rotation_speed * delta)
+	time_passed += delta
 	
-	# Ambil rotasi X saat ini (antara -PI dan PI)
-	var rot_x = rotation.x
-	
+	var total_cycle = day_duration + transition_duration + night_duration + transition_duration
+	var t = fmod(time_passed, total_cycle)
+
 	var intensity_factor = 0.0
 	
-	if rot_x < 0.0:
-		# Siang hari
-		intensity_factor = sin(abs(rot_x)) 
-		intensity_factor = clamp(intensity_factor * 1.5, 0.0, 1.0)
-	else:
-		# Malam hari
-		intensity_factor = 0.0
-		
-	# Terapkan energi cahaya ke jalanan / dunia (dengan sedikit cahaya di malam hari agar tak pitch black)
-	light_energy = max_energy * max(intensity_factor, 0.05)
+	# === SIANG ===
+	if t < day_duration:
+		intensity_factor = 1.0
 	
-	# Redupkan latar belakang langit (PENTING untuk membuat langit malam jadi hitam/gelap)
+	# === SUNSET (terang → gelap) ===
+	elif t < day_duration + transition_duration:
+		var local_t = (t - day_duration) / transition_duration
+		intensity_factor = lerp(1.0, light_dimness, local_t)
+	
+	# === MALAM ===
+	elif t < day_duration + transition_duration + night_duration:
+		intensity_factor = light_dimness
+	
+	# === SUNRISE (gelap → terang) ===
+	else:
+		var local_t = (t - (day_duration + transition_duration + night_duration)) / transition_duration
+		intensity_factor = lerp(light_dimness, 1.0, local_t)
+	
+	# Terapkan ke cahaya (biar nggak pitch black)
+	light_energy = max_energy * max(intensity_factor, light_dimness)
+	
+	# Environment (langit & ambient)
 	if is_instance_valid(world_env) and world_env.environment != null:
-		# Gunakan background_energy_multiplier untuk menggelapkan langit secara fisik
 		world_env.environment.background_energy_multiplier = max(intensity_factor, 0.02)
 		world_env.environment.ambient_light_energy = max(intensity_factor, 0.1)
