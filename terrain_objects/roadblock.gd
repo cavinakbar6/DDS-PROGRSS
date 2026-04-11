@@ -28,4 +28,5 @@ func _ready() -> void:
 	area_shape.size = size
 	hitbox_shape.shape = area_shape
 	hitbox.position = collision.position
+	add_to_group("ObstacleObjects")
 	print("roadblock spawned")
