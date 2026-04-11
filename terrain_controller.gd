@@ -43,7 +43,7 @@ var allow_spawn: bool = false           # dikontrol dari Player.gd
 # =============================================================
 # PENGATURAN SCENERY
 # =============================================================
-@export var scenery_spawn_chance: float = 10     # seberapa sering muncul pohon
+@export var scenery_spawn_chance: float = 10000000     # seberapa sering muncul pohon
 @export var scenery_min_distance: float = 25.0    # jarak minimal dari player
 @export var scenery_max_distance: float = 500.0    # jarak maksimal dari player
 @export var scenery_side_offset: float = 15.0     # jarak dari jalan utama ke kiri/kanan
@@ -191,7 +191,7 @@ func _progress_terrain(delta: float) -> void:
 		first_terrain.queue_free()
 		if allow_spawn and randf() < object_spawn_chance:
 			_spawn_object_on_block(block)
-		if (allow_spawn or scenery_always_active) and randf() < scenery_spawn_chance:
+		if scenery_always_active and randf() < scenery_spawn_chance:
 			_spawn_scenery(block)
 
  

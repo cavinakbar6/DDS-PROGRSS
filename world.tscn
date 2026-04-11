@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=4 uid="uid://cno840nyxxpw2"]
+[gd_scene load_steps=34 format=4 uid="uid://cno840nyxxpw2"]
 
 [ext_resource type="Script" uid="uid://cbbob815bg6nb" path="res://player.gd" id="1_rjl68"]
 [ext_resource type="PackedScene" uid="uid://odgtnpypykcy" path="res://terrain_controller.tscn" id="1_wvryj"]
@@ -19,7 +19,8 @@
 [ext_resource type="Texture2D" uid="uid://dk5aqx03gqw07" path="res://asset/gameover.png" id="13_hiqwa"]
 [ext_resource type="Texture2D" uid="uid://nhwrka35b5lk" path="res://asset/gamespace_dashboard.png" id="15_hiqwa"]
 [ext_resource type="PackedScene" path="res://pause_menu.tscn" id="16_pausemenu"]
-[ext_resource type="Script" path="res://day_night_cycle.gd" id="17_daynight"]
+[ext_resource type="Script" uid="uid://by1jkd7ffhsu3" path="res://day_night_cycle.gd" id="17_daynight"]
+
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_om122"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
 ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -68,7 +69,7 @@ loop_end = 99888
 environment = SubResource("Environment_y0213")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.30236992, 0.9531907, 0, -0.9531907, 0.30236992, 0, 0, -0.7014442)
+transform = Transform3D(1, 0, 0, 0, 0.30237, 0.953191, 0, -0.953191, 0.30237, 0, 0, -0.701444)
 shadow_enabled = true
 script = ExtResource("17_daynight")
 
@@ -135,9 +136,9 @@ stream = ExtResource("7_wse8f")
 initial_velocity = 40.0
 max_velocity = 70.0
 
-[node name="MainUI" type="CanvasLayer" parent="."]
+[node name="DashboardLayer" type="CanvasLayer" parent="."]
 
-[node name="Main" type="PanelContainer" parent="MainUI"]
+[node name="Main" type="PanelContainer" parent="DashboardLayer"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -145,33 +146,33 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_hiqwa")
 
-[node name="Dashboard" type="TextureRect" parent="MainUI/Main"]
+[node name="Dashboard" type="TextureRect" parent="DashboardLayer/Main"]
 layout_mode = 2
 texture = ExtResource("15_hiqwa")
 expand_mode = 5
 
-[node name="Steer" type="PanelContainer" parent="MainUI/Main"]
+[node name="Steer" type="PanelContainer" parent="DashboardLayer/Main"]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_il2jm")
 
-[node name="Center" type="TextureRect" parent="MainUI/Main/Steer"]
+[node name="Center" type="TextureRect" parent="DashboardLayer/Main/Steer"]
 layout_mode = 2
 texture = ExtResource("10_2u3nc")
 expand_mode = 5
 
-[node name="Right" type="TextureRect" parent="MainUI/Main/Steer"]
+[node name="Right" type="TextureRect" parent="DashboardLayer/Main/Steer"]
 layout_mode = 2
 texture = ExtResource("11_26xuy")
 expand_mode = 5
 
-[node name="Left" type="TextureRect" parent="MainUI/Main/Steer"]
+[node name="Left" type="TextureRect" parent="DashboardLayer/Main/Steer"]
 layout_mode = 2
 texture = ExtResource("12_bc84e")
 expand_mode = 5
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
+[node name="MainUI" type="CanvasLayer" parent="."]
 
-[node name="ScoreLabel" type="Label" parent="CanvasLayer"]
+[node name="ScoreLabel" type="Label" parent="MainUI"]
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
@@ -187,7 +188,7 @@ text = "Score:
 0"
 horizontal_alignment = 1
 
-[node name="HealthBar" type="ProgressBar" parent="CanvasLayer"]
+[node name="HealthBar" type="ProgressBar" parent="MainUI"]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -201,7 +202,7 @@ grow_horizontal = 2
 grow_vertical = 2
 value = 100.0
 
-[node name="HealthLabel" type="Label" parent="CanvasLayer"]
+[node name="HealthLabel" type="Label" parent="MainUI"]
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
@@ -215,7 +216,7 @@ theme_override_font_sizes/font_size = 27
 text = "HEALTH"
 horizontal_alignment = 1
 
-[node name="StartUI" type="Control" parent="CanvasLayer"]
+[node name="StartUI" type="Control" parent="MainUI"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -223,7 +224,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="InstructionLabel" type="Label" parent="CanvasLayer/StartUI"]
+[node name="InstructionLabel" type="Label" parent="MainUI/StartUI"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -243,7 +244,7 @@ text = "PRESS LEFT OR RIGHT..."
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ControlLabel" type="Label" parent="CanvasLayer/StartUI"]
+[node name="ControlLabel" type="Label" parent="MainUI/StartUI"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -263,7 +264,7 @@ text = "CONTROL:"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="SkipLabel" type="Label" parent="CanvasLayer/StartUI"]
+[node name="SkipLabel" type="Label" parent="MainUI/StartUI"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -283,7 +284,7 @@ text = "PRESS ANY KEY TO SKIP"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Container" type="Container" parent="CanvasLayer/StartUI"]
+[node name="Container" type="Container" parent="MainUI/StartUI"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -293,14 +294,14 @@ anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="CursorKeysLeftRightTopDownDirectionKeysOrNavigationArrowKeysOnGrayComputerKeyboard2ph0p0g" type="Sprite2D" parent="CanvasLayer/StartUI/Container"]
-position = Vector2(-576, -4.0000114)
-scale = Vector2(0.49184924, 0.4827058)
+[node name="CursorKeysLeftRightTopDownDirectionKeysOrNavigationArrowKeysOnGrayComputerKeyboard2ph0p0g" type="Sprite2D" parent="MainUI/StartUI/Container"]
+position = Vector2(-576, -4.00001)
+scale = Vector2(0.491849, 0.482706)
 texture = ExtResource("8_ioo17")
 
-[node name="As" type="Sprite2D" parent="CanvasLayer/StartUI/Container"]
-position = Vector2(590, 3.9999962)
-scale = Vector2(0.50500023, 0.4969008)
+[node name="As" type="Sprite2D" parent="MainUI/StartUI/Container"]
+position = Vector2(590, 4)
+scale = Vector2(0.505, 0.496901)
 texture = ExtResource("9_wse8f")
 
 [node name="GameOverUI" type="CanvasLayer" parent="."]
@@ -332,7 +333,7 @@ offset_bottom = -50.5
 grow_horizontal = 2
 grow_vertical = 2
 theme = SubResource("Theme_2o6r5")
-theme_override_colors/font_color = Color(0.95011276, 0.7184719, 0, 1)
+theme_override_colors/font_color = Color(0.950113, 0.718472, 0, 1)
 theme_override_fonts/font = ExtResource("11_70uel")
 theme_override_font_sizes/font_size = 50
 text = "Final Score: 0"

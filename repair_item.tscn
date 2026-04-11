@@ -1,0 +1,32 @@
+[gd_scene load_steps=5 format=3 uid="uid://g3qe86q88v1p"]
+
+[ext_resource type="Script" uid="uid://occda8cmfkgf" path="res://terrain_objects/repair_item.gd" id="1_scr"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_green"]
+albedo_color = Color(0.2, 1, 0.3, 1)
+metallic = 0.8
+roughness = 0.2
+emission_enabled = true
+emission = Color(0.2, 1, 0.3, 1)
+emission_energy_multiplier = 4.0
+
+[sub_resource type="TorusMesh" id="TorusMesh_item"]
+material = SubResource("StandardMaterial3D_green")
+inner_radius = 0.4
+outer_radius = 0.7
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_hitbox"]
+size = Vector3(1.5, 1.5, 1.5)
+
+[node name="RepairItem" type="Node3D" groups=["HealObjects"]]
+script = ExtResource("1_scr")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.8, 0)
+mesh = SubResource("TorusMesh_item")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+shape = SubResource("BoxShape3D_hitbox")

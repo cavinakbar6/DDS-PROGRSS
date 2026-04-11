@@ -4,7 +4,7 @@ extends DirectionalLight3D
 @export var transition_duration: float = 3.0
 @export var night_duration: float = 40.0
 
-# kontrol gelap malam
+# 🔥 kontrol gelap malam
 @export var night_min_intensity: float = 0.2
 
 var max_energy: float = 1.0

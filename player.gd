@@ -27,7 +27,7 @@ var is_game_started: bool = false # Untuk layar "Mulai"
 var car_health: float = 100.0
 const MAX_HEALTH: float = 100.0
 var invulnerability_timer: float = 0.0
-const I_FRAMES_DURATION: float = 1.5
+const I_FRAMES_DURATION: float = 0.1
 
 # Variabel Efek Kerusakan (Belok Otomatis)
 var damage_auto_turn_dir: int = 0
@@ -49,26 +49,27 @@ var using_debug_camera: bool = false
 @onready var debug_camera: Camera3D = $CameraDebug
 
 # PASTIKAN PATH UI INI SESUAI DENGAN STRUKTUR SCENE ANDA:
-@onready var score_label: Label = get_node("/root/World/CanvasLayer/ScoreLabel")
+@onready var score_label: Label = get_node("/root/World/MainUI/ScoreLabel")
 @onready var game_over_ui: Control = get_node("/root/World/GameOverUI/ColorRect")
 var final_score_label: Label
 var high_score_label: Label
 
 # [BARU] Referensi UI "Mulai" (PASTIKAN PATH INI BENAR)
-@onready var start_ui: Control = get_node("/root/World/CanvasLayer/StartUI")
+@onready var start_ui: Control = get_node("/root/World/MainUI/StartUI")
 
 # Referensi Node UI Health
-@onready var health_bar: ProgressBar = get_node("/root/World/CanvasLayer/HealthBar")
-@onready var health_label: Label = get_node("/root/World/CanvasLayer/HealthLabel")
+@onready var health_bar: ProgressBar = get_node("/root/World/MainUI/HealthBar")
+@onready var health_label: Label = get_node("/root/World/MainUI/HealthLabel")
 
 @onready var car_mesh: MeshInstance3D = $MeshInstance3D
 
-# =============================================================
-# REFERENSI UI MainUI
-# =============================================================
-@onready var steer_center = get_node("/root/World/MainUI/Main/Steer/Center")
-@onready var steer_right  = get_node("/root/World/MainUI/Main/Steer/Right")
-@onready var steer_left   = get_node("/root/World/MainUI/Main/Steer/Left")
+# Dashboard
+@onready var dashboard: CanvasLayer = get_node("/root/World/DashboardLayer")
+
+# Dashboard Elements
+@onready var steer_center = get_node("/root/World/DashboardLayer/Main/Steer/Center")
+@onready var steer_right  = get_node("/root/World/DashboardLayer/Main/Steer/Right")
+@onready var steer_left   = get_node("/root/World/DashboardLayer/Main/Steer/Left")
 
 
 # =============================================================
@@ -333,9 +334,14 @@ func toggle_camera() -> void:
 	if using_debug_camera:
 		debug_camera.current = false
 		normal_camera.current = true
+		dashboard.visible = true
+		print("DEBUG CAMERA OFF")
 	else:
-		normal_camera.current = true
-		debug_camera.current = false
+		debug_camera.current = true
+		normal_camera.current = false
+		dashboard.visible = false
+		print("DEBUG CAMERA ON")
+
 
 func show_game_over_ui() -> void:
 	# ... (fungsi ini tidak berubah) ...
@@ -416,7 +422,7 @@ func _update_damage_auto_turn(delta: float) -> void:
 	if not damage_turn_active:
 		damage_turn_active = true
 		damage_auto_turn_dir = -1 if randf() < 0.5 else 1  # Banting ke kiri atau kanan
-		damage_auto_turn_timer = randf_range(0.5, 2.0) + (severity * 1.5)  # Makin rusak, ditariknya makin lama
+		damage_auto_turn_timer = randf_range(1.0, 5.0) + (severity * 1.5)  # Makin rusak, ditariknya makin lama
 		damage_auto_turn_strength = 0.0  # mulai ditarik perlahan
 		return
 	
@@ -461,16 +467,29 @@ func _on_main_menu_button_pressed() -> void:
 func receive_hit(type: String, obj: Node3D) -> void:
 	if game_is_over:
 		return
-		
+	
 	if type == "heal":
-		car_health = min(car_health + 20.0, MAX_HEALTH)
+		var heal_amount = 0.0
+		if obj.has_method("get_heal"):
+			heal_amount = obj.get_heal()
+		elif "heal" in obj:
+			heal_amount = obj.damage
+		car_health += heal_amount
+		
 		if is_instance_valid(health_bar):
 			var tween = get_tree().create_tween()
 			tween.tween_property(health_bar, "value", car_health, 0.3).set_trans(Tween.TRANS_CUBIC)
 		_update_health_color()
 		obj.queue_free()
+	
 	elif type == "damage" and invulnerability_timer <= 0.0:
-		car_health -= 25.0
+		var damage_amount = 0.0
+		if obj.has_method("get_damage"):
+			damage_amount = obj.get_damage()
+		elif "damage" in obj:
+			damage_amount = obj.damage
+		car_health -= damage_amount
+		
 		if is_instance_valid(health_bar):
 			var tween = get_tree().create_tween()
 			tween.tween_property(health_bar, "value", car_health, 0.2).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_OUT)
