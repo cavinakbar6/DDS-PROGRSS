@@ -5,11 +5,14 @@ extends Node3D
 @onready var hitbox: Area3D = $Area3D
 @onready var hitbox_shape: CollisionShape3D = $Area3D/CollisionShape3D
 
+@export var damage: float = 50.0
+
 @export var spawn_chance: float = 0.5
 @export var spawn_x_range: Vector2 = Vector2(-1, 1)
 
 func _ready() -> void:
 	add_to_group("audio_players")
+	add_to_group("ObstacleObjects")
 	var aabb = mesh.get_aabb()
 	var size = aabb.size
 	var bottom = aabb.position
@@ -37,3 +40,6 @@ func _ready() -> void:
 func disable_sounds() -> void:
 	if $SpawnSound.playing:
 		$SpawnSound.stop()
+
+func get_damage() -> float:
+	return damage
