@@ -115,8 +115,7 @@ screech_min_speed = 40.0
 
 [node name="EngineSound" type="AudioStreamPlayer3D" parent="Player/Audio" unique_id=1515010568]
 stream = SubResource("AudioStreamWAV_dwbse")
-volume_db = -80.0
-max_db = -24.0
+max_db = -10.0
 autoplay = true
 
 [node name="ShiftTimer" type="Timer" parent="Player/Audio" unique_id=911709691]

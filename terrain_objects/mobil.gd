@@ -66,7 +66,7 @@ func _process(_delta: float) -> void:
 			has_passed = true
 			var current_time = Time.get_ticks_msec() / 1000.0
 			
-			if current_time - player.last_pass_sound_time > 0.6:
+			if current_time - player.last_pass_sound_time > 0.8:
 				$PassSound.pitch_scale = randf_range(0.85, 1.15) 
 				$PassSound.play()
 				player.last_pass_sound_time = current_time
