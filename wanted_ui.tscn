@@ -1,0 +1,358 @@
+[gd_scene load_steps=9 format=3 uid="uid://du5kgovkam3wl"]
+
+[ext_resource type="Script" uid="uid://2slqlutjvdbn" path="res://wanted_ui.gd" id="1_scr"]
+[ext_resource type="Shader" uid="uid://d25s4wwga4rxb" path="res://chromakey.gdshader" id="3_shd"]
+[ext_resource type="Shader" uid="uid://case8bkg0ssnw" path="res://glow.gdshader" id="5_glow"]
+[ext_resource type="Shader" uid="uid://lcywn50mx5od" path="res://vignette_police.gdshader" id="6_vig"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vignette"]
+shader = ExtResource("6_vig")
+shader_parameter/intensity = 0.0
+shader_parameter/pulse = 0.0
+shader_parameter/edge_softness = 0.35
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_chr"]
+shader = ExtResource("3_shd")
+shader_parameter/chroma_key = Color(0, 1, 0, 1)
+shader_parameter/threshold = 0.45
+shader_parameter/smoothing = 0.15
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_glow_red"]
+shader = ExtResource("5_glow")
+shader_parameter/glow_color = Color(1, 0, 0, 1)
+shader_parameter/intensity = 3.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_glow_blue"]
+shader = ExtResource("5_glow")
+shader_parameter/glow_color = Color(0, 0.4, 1, 1)
+shader_parameter/intensity = 3.0
+
+[node name="WantedUI" type="CanvasLayer"]
+layer = 10
+script = ExtResource("1_scr")
+
+[node name="VignetteOverlay" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_vignette")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="TrackerContainer" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -928.0
+offset_top = 25.0
+offset_right = -328.0
+offset_bottom = 85.0
+grow_horizontal = 2
+
+[node name="TrackBG" type="ColorRect" parent="TrackerContainer"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -10.0
+offset_bottom = 10.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.1, 0.1, 0.1, 0.8)
+
+[node name="TrackBorder" type="ColorRect" parent="TrackerContainer/TrackBG"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 1, 1, 0.5)
+
+[node name="TrackFill" type="ColorRect" parent="TrackerContainer/TrackBG"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = -2.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.2, 0.2, 0.2, 1)
+
+[node name="PlayerTarget" type="ColorRect" parent="TrackerContainer"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -60.0
+offset_top = -20.0
+offset_right = -20.0
+offset_bottom = 20.0
+grow_horizontal = 0
+grow_vertical = 2
+color = Color(0, 0.8, 0.3, 1)
+
+[node name="PlayerText" type="Label" parent="TrackerContainer/PlayerTarget"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 14
+text = "YOU"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PoliceIcon" type="TextureRect" parent="TrackerContainer"]
+material = SubResource("ShaderMaterial_chr")
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 10.0
+offset_top = -30.0
+offset_right = 110.0
+offset_bottom = 70.0
+grow_vertical = 2
+scale = Vector2(0.6, 0.6)
+expand_mode = 1
+stretch_mode = 5
+
+[node name="SireneRed" type="ColorRect" parent="TrackerContainer/PoliceIcon"]
+show_behind_parent = true
+material = SubResource("ShaderMaterial_glow_red")
+layout_mode = 0
+offset_left = -10.0
+offset_top = -10.0
+offset_right = 60.0
+offset_bottom = 60.0
+
+[node name="SireneBlue" type="ColorRect" parent="TrackerContainer/PoliceIcon"]
+show_behind_parent = true
+material = SubResource("ShaderMaterial_glow_blue")
+layout_mode = 0
+offset_left = 40.0
+offset_top = -10.0
+offset_right = 110.0
+offset_bottom = 60.0
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -300.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = 80.0
+grow_horizontal = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.2, 0.2, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 20
+text = "WANTED LEVEL"
+horizontal_alignment = 2
+
+[node name="StarsHBox" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 2
+
+[node name="Star1" type="Label" parent="MarginContainer/VBoxContainer/StarsHBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "★"
+
+[node name="Star2" type="Label" parent="MarginContainer/VBoxContainer/StarsHBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "★"
+
+[node name="Star3" type="Label" parent="MarginContainer/VBoxContainer/StarsHBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "★"
+
+[node name="Star4" type="Label" parent="MarginContainer/VBoxContainer/StarsHBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "★"
+
+[node name="Star5" type="Label" parent="MarginContainer/VBoxContainer/StarsHBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "★"
+
+[node name="Star6" type="Label" parent="MarginContainer/VBoxContainer/StarsHBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "★"
+
+[node name="EmergencyStrip" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -40.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+
+[node name="StripBG" type="ColorRect" parent="EmergencyStrip"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.05, 0.02, 0.02, 0.85)
+
+[node name="StripBorderTop" type="ColorRect" parent="EmergencyStrip"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 3.0
+grow_horizontal = 2
+color = Color(1, 0, 0, 1)
+
+[node name="ScrollLabel" type="Label" parent="EmergencyStrip"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 18
+text = "POLICE PURSUIT IN PROGRESS"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+
+[node name="HeartbeatOverlay" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0)
+
+[node name="RadioChatter" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = -90.0
+offset_right = 500.0
+offset_bottom = -50.0
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.3, 1, 0.3, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 16
+text = ""
+
+[node name="BustedOverlay" type="ColorRect" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.6, 0, 0, 0)
+
+[node name="BustedText" type="Label" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -400.0
+offset_top = -80.0
+offset_right = 400.0
+offset_bottom = 80.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 0.1, 0.1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 12
+theme_override_font_sizes/font_size = 120
+text = "BUSTED"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BustedSubtext" type="Label" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = 60.0
+offset_right = 300.0
+offset_bottom = 120.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 24
+text = "WANTED LEVEL MAXED OUT"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BustedButtons" type="VBoxContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -120.0
+offset_top = 130.0
+offset_right = 120.0
+offset_bottom = 250.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 12
+
+[node name="RetryButton" type="Button" parent="BustedButtons"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 0.3, 0.3, 1)
+theme_override_font_sizes/font_size = 22
+text = "RETRY"
+
+[node name="MainMenuButton" type="Button" parent="BustedButtons"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 0.3, 0.3, 1)
+theme_override_font_sizes/font_size = 22
+text = "MAIN MENU"

@@ -129,6 +129,8 @@ func _progress_obstacles(delta: float) -> void:
 			if hitbox and hitbox.get_overlapping_bodies().has(player):
 				if obstacle.is_in_group("HealObjects"):
 					player.receive_hit("heal", obstacle)
+				elif obstacle.is_in_group("BribeObjects"):
+					player.receive_hit("bribe", obstacle)
 				elif obstacle.is_in_group("ObstacleObjects"):
 					player.receive_hit("damage", obstacle)
  
