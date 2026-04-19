@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://dwjc64phwnrib" path="res://asset/gamespace_motor (1).png" id="1_ghnwk"]
 [ext_resource type="Script" uid="uid://emr3mkj4xjgo" path="res://terrain_objects/motor.gd" id="1_inf5e"]
-[ext_resource type="AudioStream" uid="uid://bwmd0ycka3olt" path="res://Sound/Motor/Motorcycle Horn - Sound Effect for editing.mp3" id="3_j3w7b"]
+[ext_resource type="AudioStream" uid="uid://drptu28kdlx0w" path="res://Sound/Motor/Motorcycle Horn - Sound Effect for editing.wav" id="3_j3w7b"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_inf5e"]
 size = Vector3(1, 1.30774, 1)
