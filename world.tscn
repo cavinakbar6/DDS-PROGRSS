@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=4 uid="uid://cno840nyxxpw2"]
+[gd_scene format=4 uid="uid://cno840nyxxpw2"]
 
 [ext_resource type="Script" uid="uid://cbbob815bg6nb" path="res://player.gd" id="1_rjl68"]
 [ext_resource type="PackedScene" uid="uid://odgtnpypykcy" path="res://terrain_controller.tscn" id="1_wvryj"]
@@ -63,82 +63,83 @@ loop_end = 99888
 
 [sub_resource type="Theme" id="Theme_2o6r5"]
 
-[node name="World" type="Node3D"]
+[node name="World" type="Node3D" unique_id=136713038]
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1380816863]
 environment = SubResource("Environment_y0213")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1080771480]
 transform = Transform3D(1, 0, 0, 0, 0.30237, 0.953191, 0, -0.953191, 0.30237, 0, 0, -0.701444)
 shadow_enabled = true
 script = ExtResource("17_daynight")
 
-[node name="Player" type="CharacterBody3D" parent="." node_paths=PackedStringArray("terrain_controller")]
+[node name="Player" type="CharacterBody3D" parent="." unique_id=1421345576 node_paths=PackedStringArray("terrain_controller")]
 process_mode = 3
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 0.1, 2.08165e-12)
 script = ExtResource("1_rjl68")
 terrain_controller = NodePath("../TerrainController")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Player"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player" unique_id=1902967093]
 shape = SubResource("CapsuleShape3D_ofssd")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Player"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Player" unique_id=2134901097]
 transform = Transform3D(1, 0, 0, 0, 0.530533, 0, 0, 0, 1, 2.08165e-12, -0.2565, 2.08165e-12)
 mesh = SubResource("CapsuleMesh_187ag")
 
-[node name="Camera3D" type="Camera3D" parent="Player"]
+[node name="Camera3D" type="Camera3D" parent="Player" unique_id=1916901448]
 transform = Transform3D(1, 0, 0, 0, 0.984384, 0.176037, 0, -0.176037, 0.984384, 0, 1.03728, 0.50842)
 fov = 80.0
-far = 60.0
+far = 500.0
 
-[node name="dashboard" type="MeshInstance3D" parent="Player"]
+[node name="dashboard" type="MeshInstance3D" parent="Player" unique_id=1362350129]
 transform = Transform3D(0.807226, 0, 0, 0, -4.37114e-08, -0.5, 0, 1, -2.18557e-08, 0, 0.763242, 0.0454274)
 visible = false
 mesh = SubResource("PlaneMesh_aqk2v")
 surface_material_override/0 = SubResource("StandardMaterial3D_036b0")
 
-[node name="bir" type="MeshInstance3D" parent="Player"]
+[node name="bir" type="MeshInstance3D" parent="Player" unique_id=1361122259]
 transform = Transform3D(0.4, 0, 0, 0, -1.74846e-08, -0.4, 0, 0.4, -1.74846e-08, -0.140152, 0.691177, 0.122019)
 visible = false
 mesh = SubResource("PlaneMesh_036b0")
 surface_material_override/0 = SubResource("StandardMaterial3D_dwbse")
 
-[node name="CameraDebug" type="Camera3D" parent="Player"]
+[node name="CameraDebug" type="Camera3D" parent="Player" unique_id=1177903044]
 transform = Transform3D(0.80696, 0.201999, -0.554988, 0, 0.939693, 0.34202, 0.590606, -0.275997, 0.758295, -6.29213, 5.0546, 6.18968)
 fov = 80.0
 far = 60.0
 
-[node name="Audio" type="Node3D" parent="Player"]
+[node name="Audio" type="Node3D" parent="Player" unique_id=1684399602]
 process_mode = 1
 script = ExtResource("4_036b0")
 screech_min_speed = 40.0
 
-[node name="EngineSound" type="AudioStreamPlayer3D" parent="Player/Audio"]
+[node name="EngineSound" type="AudioStreamPlayer3D" parent="Player/Audio" unique_id=1515010568]
 stream = SubResource("AudioStreamWAV_dwbse")
+max_db = -10.0
 autoplay = true
 
-[node name="ShiftTimer" type="Timer" parent="Player/Audio"]
+[node name="ShiftTimer" type="Timer" parent="Player/Audio" unique_id=911709691]
 wait_time = 0.695
 one_shot = true
 
-[node name="GearShiftSFX" type="AudioStreamPlayer3D" parent="Player/Audio"]
+[node name="GearShiftSFX" type="AudioStreamPlayer3D" parent="Player/Audio" unique_id=1240198496]
 stream = ExtResource("5_dwbse")
 
-[node name="TireScreechSFX" type="AudioStreamPlayer3D" parent="Player/Audio"]
+[node name="TireScreechSFX" type="AudioStreamPlayer3D" parent="Player/Audio" unique_id=1322565556]
 stream = ExtResource("6_pkg7o")
 volume_db = -80.0
 autoplay = true
 
-[node name="GameOverMusic" type="AudioStreamPlayer" parent="Player/Audio"]
+[node name="GameOverMusic" type="AudioStreamPlayer" parent="Player/Audio" unique_id=888232479]
 stream = ExtResource("7_wse8f")
 
-[node name="TerrainController" parent="." instance=ExtResource("1_wvryj")]
+[node name="TerrainController" parent="." unique_id=947274155 instance=ExtResource("1_wvryj")]
 initial_velocity = 40.0
 max_velocity = 70.0
 
-[node name="DashboardLayer" type="CanvasLayer" parent="."]
+[node name="DashboardLayer" type="CanvasLayer" parent="." unique_id=79425635]
 
-[node name="Main" type="PanelContainer" parent="DashboardLayer"]
+[node name="Main" type="PanelContainer" parent="DashboardLayer" unique_id=1376784750]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -146,33 +147,33 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_hiqwa")
 
-[node name="Dashboard" type="TextureRect" parent="DashboardLayer/Main"]
+[node name="Dashboard" type="TextureRect" parent="DashboardLayer/Main" unique_id=2122104464]
 layout_mode = 2
 texture = ExtResource("15_hiqwa")
 expand_mode = 5
 
-[node name="Steer" type="PanelContainer" parent="DashboardLayer/Main"]
+[node name="Steer" type="PanelContainer" parent="DashboardLayer/Main" unique_id=838401435]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_il2jm")
 
-[node name="Center" type="TextureRect" parent="DashboardLayer/Main/Steer"]
+[node name="Center" type="TextureRect" parent="DashboardLayer/Main/Steer" unique_id=1288897942]
 layout_mode = 2
 texture = ExtResource("10_2u3nc")
 expand_mode = 5
 
-[node name="Right" type="TextureRect" parent="DashboardLayer/Main/Steer"]
+[node name="Right" type="TextureRect" parent="DashboardLayer/Main/Steer" unique_id=1104375281]
 layout_mode = 2
 texture = ExtResource("11_26xuy")
 expand_mode = 5
 
-[node name="Left" type="TextureRect" parent="DashboardLayer/Main/Steer"]
+[node name="Left" type="TextureRect" parent="DashboardLayer/Main/Steer" unique_id=1024797119]
 layout_mode = 2
 texture = ExtResource("12_bc84e")
 expand_mode = 5
 
-[node name="MainUI" type="CanvasLayer" parent="."]
+[node name="MainUI" type="CanvasLayer" parent="." unique_id=1522585374]
 
-[node name="ScoreLabel" type="Label" parent="MainUI"]
+[node name="ScoreLabel" type="Label" parent="MainUI" unique_id=815943075]
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
@@ -188,7 +189,7 @@ text = "Score:
 0"
 horizontal_alignment = 1
 
-[node name="HealthBar" type="ProgressBar" parent="MainUI"]
+[node name="HealthBar" type="ProgressBar" parent="MainUI" unique_id=509623670]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -202,7 +203,7 @@ grow_horizontal = 2
 grow_vertical = 2
 value = 100.0
 
-[node name="HealthLabel" type="Label" parent="MainUI"]
+[node name="HealthLabel" type="Label" parent="MainUI" unique_id=1650049134]
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
@@ -216,7 +217,7 @@ theme_override_font_sizes/font_size = 27
 text = "HEALTH"
 horizontal_alignment = 1
 
-[node name="StartUI" type="Control" parent="MainUI"]
+[node name="StartUI" type="Control" parent="MainUI" unique_id=1821458234]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -224,7 +225,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="InstructionLabel" type="Label" parent="MainUI/StartUI"]
+[node name="InstructionLabel" type="Label" parent="MainUI/StartUI" unique_id=1605026570]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -244,7 +245,7 @@ text = "PRESS LEFT OR RIGHT..."
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ControlLabel" type="Label" parent="MainUI/StartUI"]
+[node name="ControlLabel" type="Label" parent="MainUI/StartUI" unique_id=1416078403]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -264,7 +265,7 @@ text = "CONTROL:"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="SkipLabel" type="Label" parent="MainUI/StartUI"]
+[node name="SkipLabel" type="Label" parent="MainUI/StartUI" unique_id=848995158]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -284,7 +285,7 @@ text = "PRESS ANY KEY TO SKIP"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Container" type="Container" parent="MainUI/StartUI"]
+[node name="Container" type="Container" parent="MainUI/StartUI" unique_id=1230466397]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -294,20 +295,20 @@ anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="CursorKeysLeftRightTopDownDirectionKeysOrNavigationArrowKeysOnGrayComputerKeyboard2ph0p0g" type="Sprite2D" parent="MainUI/StartUI/Container"]
+[node name="CursorKeysLeftRightTopDownDirectionKeysOrNavigationArrowKeysOnGrayComputerKeyboard2ph0p0g" type="Sprite2D" parent="MainUI/StartUI/Container" unique_id=921685386]
 position = Vector2(-576, -4.00001)
 scale = Vector2(0.491849, 0.482706)
 texture = ExtResource("8_ioo17")
 
-[node name="As" type="Sprite2D" parent="MainUI/StartUI/Container"]
+[node name="As" type="Sprite2D" parent="MainUI/StartUI/Container" unique_id=308841078]
 position = Vector2(590, 4)
 scale = Vector2(0.505, 0.496901)
 texture = ExtResource("9_wse8f")
 
-[node name="GameOverUI" type="CanvasLayer" parent="."]
+[node name="GameOverUI" type="CanvasLayer" parent="." unique_id=1317169803]
 process_mode = 3
 
-[node name="ColorRect" type="ColorRect" parent="GameOverUI"]
+[node name="ColorRect" type="ColorRect" parent="GameOverUI" unique_id=48088543]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -319,7 +320,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 0)
 
-[node name="FinalScoreLabel" type="Label" parent="GameOverUI/ColorRect"]
+[node name="FinalScoreLabel" type="Label" parent="GameOverUI/ColorRect" unique_id=1803911325]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -339,7 +340,7 @@ theme_override_font_sizes/font_size = 50
 text = "Final Score: 0"
 horizontal_alignment = 1
 
-[node name="RestartButton" type="Button" parent="GameOverUI/ColorRect"]
+[node name="RestartButton" type="Button" parent="GameOverUI/ColorRect" unique_id=1450621151]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -356,7 +357,7 @@ theme_override_font_sizes/font_size = 24
 icon = ExtResource("11_2o6r5")
 icon_alignment = 1
 
-[node name="MenuButton" type="Button" parent="GameOverUI/ColorRect"]
+[node name="MenuButton" type="Button" parent="GameOverUI/ColorRect" unique_id=590628838]
 process_mode = 3
 layout_mode = 1
 anchors_preset = 8
@@ -373,7 +374,7 @@ grow_vertical = 2
 icon = ExtResource("12_70uel")
 icon_alignment = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="GameOverUI/ColorRect"]
+[node name="VBoxContainer" type="VBoxContainer" parent="GameOverUI/ColorRect" unique_id=279118037]
 visible = false
 layout_mode = 1
 anchors_preset = 8
@@ -388,7 +389,7 @@ offset_bottom = 131.5
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="GameOver" type="TextureRect" parent="GameOverUI/ColorRect"]
+[node name="GameOver" type="TextureRect" parent="GameOverUI/ColorRect" unique_id=195437559]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -400,7 +401,7 @@ offset_bottom = 313.0
 grow_horizontal = 2
 texture = ExtResource("13_hiqwa")
 
-[node name="PauseMenu" parent="." instance=ExtResource("16_pausemenu")]
+[node name="PauseMenu" parent="." unique_id=2088050157 instance=ExtResource("16_pausemenu")]
 
 [connection signal="pressed" from="GameOverUI/ColorRect/RestartButton" to="Player" method="_on_restart_button_pressed"]
 [connection signal="pressed" from="GameOverUI/ColorRect/MenuButton" to="Player" method="_on_main_menu_button_pressed"]

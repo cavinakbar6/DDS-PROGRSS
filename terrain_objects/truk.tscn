@@ -1,8 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://cyus6r1w5g64f"]
+[gd_scene format=3 uid="uid://cyus6r1w5g64f"]
 
 [ext_resource type="Script" uid="uid://b7imglqsyd7g" path="res://terrain_objects/truk.gd" id="1_6wnxp"]
 [ext_resource type="Texture2D" uid="uid://dvp6xq36v3hb3" path="res://asset/gamespace_truk.png" id="2_wyfyf"]
-[ext_resource type="AudioStream" uid="uid://diy0elaggm5hy" path="res://Sound/truck.wav" id="3_wyfyf"]
+[ext_resource type="AudioStream" uid="uid://diy0elaggm5hy" path="res://Sound/Truk/truck.wav" id="3_wyfyf"]
+[ext_resource type="AudioStream" uid="uid://o4vp2ed6eei7" path="res://Sound/Truk/truk lewat.wav" id="4_ap2ud"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6wnxp"]
 transparency = 2
@@ -20,29 +21,32 @@ size = Vector3(1, 1.30774, 1)
 [sub_resource type="BoxShape3D" id="BoxShape3D_ap2ud"]
 size = Vector3(1, 1.30774, 1)
 
-[node name="truk" type="Node3D"]
+[node name="truk" type="Node3D" unique_id=2133664635]
 script = ExtResource("1_6wnxp")
 spawn_chance = 0.2
 spawn_x_range = Vector2(0.15, 0.8)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1923181619]
 transform = Transform3D(4.40177, 0, 0, 0, -8.74228e-08, -5.000572, 0, 2, -2.1858236e-07, 0, 1.766205, 0)
 mesh = SubResource("PlaneMesh_6wnxp")
 skeleton = NodePath("../StaticBody3D2")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="."]
+[node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=384291043]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=939954426]
 transform = Transform3D(2.29964, 0, 0, 0, 2.16628, 0, 0, 0, 1, 0, 1.01968, 0)
 shape = SubResource("BoxShape3D_wyfyf")
 
-[node name="Area3D" type="Area3D" parent="."]
+[node name="Area3D" type="Area3D" parent="." unique_id=1415166586]
 disable_mode = 1
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D" unique_id=547328674]
 transform = Transform3D(1.30724, 0, 0, 0, 2.16628, 0, 0, 0, 1, 0, 1.01968, 0)
 shape = SubResource("BoxShape3D_ap2ud")
 
-[node name="SpawnSound" type="AudioStreamPlayer3D" parent="."]
+[node name="SpawnSound" type="AudioStreamPlayer3D" parent="." unique_id=2056570804]
 stream = ExtResource("3_wyfyf")
 volume_db = 15.0
+
+[node name="PassSound" type="AudioStreamPlayer3D" parent="." unique_id=1132273705]
+stream = ExtResource("4_ap2ud")
