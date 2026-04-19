@@ -564,6 +564,14 @@ func receive_hit(type: String, obj: Node3D) -> void:
 		wanted_stars += 1
 		_update_wanted_ui()
 		
+		# ========================================================
+		# MEMANGGIL EFEK GETAR DI SCRIPT KAMERA SAAT NABRAK
+		# ========================================================
+		if is_instance_valid(normal_camera):
+			if normal_camera.has_method("add_shake"):
+				normal_camera.add_shake(1.0) # Angka 1.0 adalah kekuatan getarannya
+		# ========================================================
+		
 		if is_instance_valid(health_bar):
 			var tween = get_tree().create_tween()
 			tween.tween_property(health_bar, "value", car_health, 0.2).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_OUT)

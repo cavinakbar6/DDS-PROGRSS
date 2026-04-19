@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://bybltpl8gohpv"]
+[gd_scene format=3 uid="uid://bybltpl8gohpv"]
 
 [ext_resource type="Script" uid="uid://dkrra3t53gw3k" path="res://main_menu.gd" id="1_06t4h"]
 [ext_resource type="Texture2D" uid="uid://w8ywxtfbhgcu" path="res://asset/gamespace_mainmenu.png" id="2_glbon"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://birjyk4g4uhef" path="res://asset/exit.png" id="3_glbon"]
 [ext_resource type="Texture2D" uid="uid://cakhqlukxtvk6" path="res://asset/DDR_logo.png" id="4_nlkkf"]
 [ext_resource type="AudioStream" uid="uid://624yyfrdqrjh" path="res://Sound/MainMenuBGM.mp3" id="6_nlkkf"]
+[ext_resource type="Texture2D" uid="uid://dschmnqgfqqx8" path="res://asset/Settings.png" id="7_dy7ct"]
 [ext_resource type="PackedScene" path="res://settings_ui.tscn" id="7_settings"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7vrkn"]
@@ -15,7 +16,9 @@ bg_color = Color(0.43529412, 0.6117647, 0.827451, 0)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fu7sn"]
 bg_color = Color(0.42352942, 0.6117647, 0.8392157, 0)
 
-[node name="MainMenu" type="Control"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0o4t1"]
+
+[node name="MainMenu" type="Control" unique_id=1239796749]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -24,7 +27,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_06t4h")
 
-[node name="TextureRect" type="TextureRect" parent="."]
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1757164818]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -34,34 +37,34 @@ grow_vertical = 2
 texture = ExtResource("2_glbon")
 expand_mode = 3
 
-[node name="PlayButton" type="Button" parent="."]
+[node name="PlayButton" type="Button" parent="." unique_id=1095993167]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -228.5
-offset_top = -47.5
-offset_right = 228.5
-offset_bottom = 87.5
+offset_left = -226.0
+offset_top = -45.0
+offset_right = 231.0
+offset_bottom = 90.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_font_sizes/font_size = 24
 theme_override_styles/normal = SubResource("StyleBoxFlat_7vrkn")
 icon = ExtResource("2_jix8l")
 
-[node name="ExitButton" type="Button" parent="."]
+[node name="ExitButton" type="Button" parent="." unique_id=1336568410]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -195.0
-offset_top = 167.0
-offset_right = 180.0
-offset_bottom = 304.0
+offset_left = -181.0
+offset_top = 199.0
+offset_right = 194.0
+offset_bottom = 336.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_font_sizes/font_size = 24
@@ -69,7 +72,7 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_fu7sn")
 icon = ExtResource("3_glbon")
 icon_alignment = 1
 
-[node name="DDRTitle" type="TextureRect" parent="."]
+[node name="DDRTitle" type="TextureRect" parent="." unique_id=1412479312]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -81,28 +84,29 @@ offset_bottom = 343.0
 grow_horizontal = 2
 texture = ExtResource("4_nlkkf")
 
-[node name="SettingsButton" type="Button" parent="."]
+[node name="SettingsButton" type="Button" parent="." unique_id=472836841]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -187.5
-offset_top = 110.0
-offset_right = 187.5
-offset_bottom = 160.0
+offset_left = -273.0
+offset_top = 89.0
+offset_right = 275.0
+offset_bottom = 208.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_fonts/font = ExtResource("2_kirifont")
 theme_override_font_sizes/font_size = 24
-text = "SETTINGS"
+theme_override_styles/normal = SubResource("StyleBoxEmpty_0o4t1")
+icon = ExtResource("7_dy7ct")
 
-[node name="MainMenuBackgroundMusic" type="AudioStreamPlayer2D" parent="."]
+[node name="MainMenuBackgroundMusic" type="AudioStreamPlayer2D" parent="." unique_id=1188359024]
 stream = ExtResource("6_nlkkf")
 volume_db = 17.165
 autoplay = true
 
-[node name="SettingsUI" parent="." instance=ExtResource("7_settings")]
+[node name="SettingsUI" parent="." unique_id=1967792053 instance=ExtResource("7_settings")]
 visible = false
 layout_mode = 1

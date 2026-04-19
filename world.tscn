@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://odgtnpypykcy" path="res://terrain_controller.tscn" id="1_wvryj"]
 [ext_resource type="Texture2D" uid="uid://cdbkymvtyos1u" path="res://asset/driverPov2.png" id="2_tlwt5"]
 [ext_resource type="Texture2D" uid="uid://b2guq23v6ymo2" path="res://asset/bir.png" id="3_aqk2v"]
+[ext_resource type="Script" uid="uid://c60qysx2vra8b" path="res://ShakeCamera.gd" id="3_bc84e"]
 [ext_resource type="Script" uid="uid://br2p4x8rjym5q" path="res://audio.gd" id="4_036b0"]
 [ext_resource type="AudioStream" uid="uid://bsc345y3jimod" path="res://Sound/gear shift.wav" id="5_dwbse"]
 [ext_resource type="AudioStream" uid="uid://dnq1vawbnvxag" path="res://Sound/tires_squal_loop.wav" id="6_pkg7o"]
@@ -18,7 +19,7 @@
 [ext_resource type="Texture2D" uid="uid://hlgbr6jxe45m" path="res://asset/gamespace_steer3.png" id="12_bc84e"]
 [ext_resource type="Texture2D" uid="uid://dk5aqx03gqw07" path="res://asset/gameover.png" id="13_hiqwa"]
 [ext_resource type="Texture2D" uid="uid://nhwrka35b5lk" path="res://asset/gamespace_dashboard.png" id="15_hiqwa"]
-[ext_resource type="PackedScene" path="res://pause_menu.tscn" id="16_pausemenu"]
+[ext_resource type="PackedScene" uid="uid://mas2bqeaeobp" path="res://pause_menu.tscn" id="16_pausemenu"]
 [ext_resource type="Script" uid="uid://by1jkd7ffhsu3" path="res://day_night_cycle.gd" id="17_daynight"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_om122"]
@@ -90,6 +91,7 @@ mesh = SubResource("CapsuleMesh_187ag")
 transform = Transform3D(1, 0, 0, 0, 0.984384, 0.176037, 0, -0.176037, 0.984384, 0, 1.03728, 0.50842)
 fov = 80.0
 far = 500.0
+script = ExtResource("3_bc84e")
 
 [node name="dashboard" type="MeshInstance3D" parent="Player" unique_id=1362350129]
 transform = Transform3D(0.807226, 0, 0, 0, -4.37114e-08, -0.5, 0, 1, -2.18557e-08, 0, 0.763242, 0.0454274)
