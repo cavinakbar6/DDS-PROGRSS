@@ -2,13 +2,13 @@
 
 importer="wav"
 type="AudioStreamWAV"
-uid="uid://diy0elaggm5hy"
-path="res://.godot/imported/truck.wav-61f696a3ce5ecee41ad1f9f9a1a28d95.sample"
+uid="uid://o4vp2ed6eei7"
+path="res://.godot/imported/truk lewat.wav-a14a4e85be6caa481573d1b468e856a9.sample"
 
 [deps]
 
-source_file="res://Sound/truck.wav"
-dest_files=["res://.godot/imported/truck.wav-61f696a3ce5ecee41ad1f9f9a1a28d95.sample"]
+source_file="res://Sound/Truk/truk lewat.wav"
+dest_files=["res://.godot/imported/truk lewat.wav-a14a4e85be6caa481573d1b468e856a9.sample"]
 
 [params]
 

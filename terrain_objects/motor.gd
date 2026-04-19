@@ -33,7 +33,7 @@ func _ready() -> void:
 	hitbox.position = collision.position
 	$SpawnSound.bus = "SFX"
 	$SpawnSound.play()
-	print("mobil spawned")
+	print("motor spawned")
 
 func disable_sounds() -> void:
 	if $SpawnSound.playing:

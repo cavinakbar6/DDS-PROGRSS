@@ -71,7 +71,9 @@ var high_score_label: Label
 @onready var steer_right  = get_node("/root/World/DashboardLayer/Main/Steer/Right")
 @onready var steer_left   = get_node("/root/World/DashboardLayer/Main/Steer/Left")
 
-
+# delay suara lewat
+var last_pass_sound_time: float = 0.0
+var last_horn_sound_time: float = 0.0
 # =============================================================
 # FUNGSI BAWAAN GODOT
 # =============================================================
