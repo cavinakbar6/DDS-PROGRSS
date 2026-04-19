@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://drptu28kdlx0w"
+path="res://.godot/imported/Motorcycle Horn - Sound Effect for editing.wav-5fecbb59e9fe9fff72baab69c6e6fccc.sample"
+
+[deps]
+
+source_file="res://Sound/Motor/Motorcycle Horn - Sound Effect for editing.wav"
+dest_files=["res://.godot/imported/Motorcycle Horn - Sound Effect for editing.wav-5fecbb59e9fe9fff72baab69c6e6fccc.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2
