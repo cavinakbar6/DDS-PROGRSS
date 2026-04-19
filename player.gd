@@ -41,6 +41,7 @@ var damage_max_turn_speed: float = 0.5
 # REFERENSI NODE
 # =============================================================
 @export var terrain_controller: Node3D
+var wanted_ui_instance: Node
 @onready var engine_audio = $Audio
 
 # Variabel untuk kamera
@@ -124,6 +125,14 @@ func _ready() -> void:
 	if is_instance_valid(health_label):
 		health_label.visible = true
 	
+	# =============================================================
+	# INISIALISASI WANTED UI (SPION & BINTANG)
+	# =============================================================
+	var wanted_scene = preload("res://wanted_ui.tscn")
+	wanted_ui_instance = wanted_scene.instantiate()
+	add_child(wanted_ui_instance)
+	_update_wanted_ui()
+
 	# Atur kamera utama
 	normal_camera.current = true
 	debug_camera.current = false
@@ -288,6 +297,8 @@ func _physics_process(delta: float) -> void:
 			var obj = collider.get_parent()
 			if obj.is_in_group("HealObjects"):
 				receive_hit("heal", obj)
+			elif obj.is_in_group("BribeObjects"):
+				receive_hit("bribe", obj)
 			elif obj.is_in_group("ObstacleObjects"):
 				receive_hit("damage", obj)
 
@@ -346,7 +357,6 @@ func toggle_camera() -> void:
 
 
 func show_game_over_ui() -> void:
-	# ... (fungsi ini tidak berubah) ...
 	if game_is_over:
 		return
 	game_is_over = true
@@ -365,13 +375,63 @@ func show_game_over_ui() -> void:
 		health_bar.visible = false
 	if is_instance_valid(health_label):
 		health_label.visible = false
-	if is_instance_valid(game_over_ui):
-		game_over_ui.visible = true
+	score_label.visible = false
+	
+	if terrain_controller:
+		terrain_controller._trigger_game_over()
+	
+	if not is_instance_valid(game_over_ui):
+		get_tree().paused = true
+		return
+	
+	# === DRAMATIC GAME OVER ANIMATION ===
+	game_over_ui.visible = true
+	game_over_ui.color = Color(0, 0, 0, 0)
+	
+	# Sembunyikan semua anak dulu
+	for child in game_over_ui.get_children():
+		child.modulate = Color(1, 1, 1, 0)
+	
+	# Phase 1: Layar gelap fade in
+	var tween_bg = create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	tween_bg.tween_property(game_over_ui, "color", Color(0, 0, 0, 0.85), 0.8).set_trans(Tween.TRANS_CUBIC)
+	
+	# Phase 2: Gambar Game Over zoom in
+	var game_over_img = game_over_ui.get_node_or_null("GameOver")
+	if game_over_img:
+		game_over_img.scale = Vector2(0.1, 0.1)
+		game_over_img.pivot_offset = game_over_img.size / 2.0
+		var tw1 = create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+		tw1.tween_interval(0.3)
+		tw1.tween_property(game_over_img, "modulate", Color(1, 1, 1, 1), 0.3)
+		var tw2 = create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+		tw2.tween_interval(0.3)
+		tw2.tween_property(game_over_img, "scale", Vector2(1.0, 1.0), 0.6).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	
+	# Phase 3: Skor fade in
 	if is_instance_valid(final_score_label):
 		final_score_label.text = "Final Score: %d" % score
+		var tw3 = create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+		tw3.tween_interval(1.0)
+		tw3.tween_property(final_score_label, "modulate", Color(1, 1, 1, 1), 0.5)
+	
 	if is_instance_valid(high_score_label):
 		high_score_label.text = "Highest Score: %d" % high_score
-	score_label.visible = false
+	
+	# Phase 4: Tombol fade in
+	var restart_btn = game_over_ui.get_node_or_null("RestartButton")
+	if restart_btn:
+		var tw4 = create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+		tw4.tween_interval(1.5)
+		tw4.tween_property(restart_btn, "modulate", Color(1, 1, 1, 1), 0.5)
+	
+	var menu_btn = game_over_ui.get_node_or_null("MenuButton")
+	if menu_btn:
+		var tw5 = create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+		tw5.tween_interval(1.7)
+		tw5.tween_property(menu_btn, "modulate", Color(1, 1, 1, 1), 0.5)
+	
+	# Pause langsung - tween tetap jalan karena TWEEN_PAUSE_PROCESS
 	get_tree().paused = true
 
 func _update_health_color() -> void:
@@ -466,6 +526,9 @@ func _on_main_menu_button_pressed() -> void:
 	get_tree().paused = false
 	get_tree().change_scene_to_file("res://main_menu.tscn")
 
+@export var MAX_WANTED_STARS: int = 6
+var wanted_stars: int = 0
+
 func receive_hit(type: String, obj: Node3D) -> void:
 	if game_is_over:
 		return
@@ -483,6 +546,11 @@ func receive_hit(type: String, obj: Node3D) -> void:
 			tween.tween_property(health_bar, "value", car_health, 0.3).set_trans(Tween.TRANS_CUBIC)
 		_update_health_color()
 		obj.queue_free()
+		
+	elif type == "bribe":
+		wanted_stars = max(wanted_stars - 1, 0)
+		_update_wanted_ui()
+		obj.queue_free()
 	
 	elif type == "damage" and invulnerability_timer <= 0.0:
 		var damage_amount = 0.0
@@ -491,6 +559,10 @@ func receive_hit(type: String, obj: Node3D) -> void:
 		elif "damage" in obj:
 			damage_amount = obj.damage
 		car_health -= damage_amount
+		
+		# Nambah Bintang Pas Nabrak!
+		wanted_stars += 1
+		_update_wanted_ui()
 		
 		if is_instance_valid(health_bar):
 			var tween = get_tree().create_tween()
@@ -501,5 +573,16 @@ func receive_hit(type: String, obj: Node3D) -> void:
 			show_game_over_ui()
 			if terrain_controller:
 				terrain_controller._trigger_game_over()
+		elif wanted_stars >= MAX_WANTED_STARS:
+			# BUSTED! Trigger dramatic animation
+			game_is_over = true
+			if is_instance_valid(wanted_ui_instance) and wanted_ui_instance.has_method("play_busted"):
+				wanted_ui_instance.play_busted()
+			if terrain_controller:
+				terrain_controller._trigger_game_over()
 		else:
 			invulnerability_timer = I_FRAMES_DURATION
+
+func _update_wanted_ui() -> void:
+	if is_instance_valid(wanted_ui_instance):
+		wanted_ui_instance.update_stars(wanted_stars)
