@@ -4,6 +4,7 @@ extends Node3D
 @onready var collision: CollisionShape3D = $StaticBody3D/CollisionShape3D
 @onready var hitbox: Area3D = $Area3D
 @onready var hitbox_shape: CollisionShape3D = $Area3D/CollisionShape3D
+@onready var headlight: Area3D = $Headlight
 
 @export var damage: float = 50.0
 @export var spawn_chance: float = 0.5
@@ -15,13 +16,16 @@ extends Node3D
 var has_horned: bool = false
 var player: Node3D
 var has_passed: bool = false
+var day_night: Node = null
 
 func _ready() -> void:
 	add_to_group("ObstacleObjects")
 	var aabb = mesh.get_aabb()
 	var size = aabb.size
 	var bottom = aabb.position
-
+	
+	day_night = get_node_or_null("/root/World/DirectionalLight3D")
+	
 	# ✅ Collider fisik (StaticBody3D)
 	var shape = BoxShape3D.new()
 	shape.size = size
@@ -63,7 +67,13 @@ func _process(_delta: float) -> void:
 				$PassSound.pitch_scale = randf_range(0.85, 1.15) 
 				$PassSound.play()
 				player.last_pass_sound_time = current_time
-				
+	
+	if day_night:
+		if day_night.is_daytime():
+			headlight.visible = false
+		else:
+			headlight.visible = true
+
 func disable_sounds() -> void:
 	if $SpawnSound.playing:
 		$SpawnSound.stop()

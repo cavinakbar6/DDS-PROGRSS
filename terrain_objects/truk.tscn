@@ -21,6 +21,15 @@ size = Vector3(1, 1.30774, 1)
 [sub_resource type="BoxShape3D" id="BoxShape3D_ap2ud"]
 size = Vector3(1, 1.30774, 1)
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ap2ud"]
+albedo_color = Color(1, 1, 1, 0)
+emission_enabled = true
+emission = Color(1, 1, 1, 1)
+emission_energy_multiplier = 2.33
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_ap2ud"]
+material = SubResource("StandardMaterial3D_ap2ud")
+
 [node name="truk" type="Node3D" unique_id=2133664635]
 script = ExtResource("1_6wnxp")
 spawn_chance = 0.2
@@ -50,3 +59,31 @@ volume_db = 15.0
 
 [node name="PassSound" type="AudioStreamPlayer3D" parent="." unique_id=1132273705]
 stream = ExtResource("4_ap2ud")
+
+[node name="Headlight" type="Area3D" parent="." unique_id=1675069419]
+
+[node name="RightLight" type="MeshInstance3D" parent="Headlight" unique_id=827444005]
+transform = Transform3D(0.106290616, 0, 0, 0, -2.1855689e-08, -0.04499619, 0, 0.49999994, -1.9668458e-09, -0.8809416, 0.79768085, 0.003775064)
+mesh = SubResource("PlaneMesh_ap2ud")
+skeleton = NodePath("../..")
+
+[node name="Beam" type="SpotLight3D" parent="Headlight/RightLight" unique_id=1281059388]
+transform = Transform3D(-9.408168, 2.0992209e-14, -6.508298e-07, 1.3835422e-07, -6.0928606e-08, -2.0000002, -9.642387e-14, -22.224102, 6.770418e-07, 0.051555634, 0.13148803, -0.05687523)
+
+[node name="LeftLight" type="MeshInstance3D" parent="Headlight" unique_id=1980894275]
+transform = Transform3D(0.106290616, 0, 0, 0, -2.1855689e-08, -0.04499619, 0, 0.49999994, -1.9668458e-09, 0.691821, 0.79768085, 0.003775064)
+mesh = SubResource("PlaneMesh_ap2ud")
+skeleton = NodePath("../..")
+
+[node name="Beam" type="SpotLight3D" parent="Headlight/LeftLight" unique_id=2074137750]
+transform = Transform3D(-9.408168, 2.0992209e-14, -6.508298e-07, 1.3835422e-07, -6.0928606e-08, -2.0000002, -9.642387e-14, -22.224102, 6.770418e-07, 0.051555157, 0.2016731, -0.05687523)
+
+[node name="LowerRightLight" type="MeshInstance3D" parent="Headlight" unique_id=736192267]
+transform = Transform3D(0.060533922, 0, 0, 0, -2.1855689e-08, -0.029999806, 0, 0.49999994, -1.3113332e-09, -0.8809416, 0.6071494, 0.003775064)
+mesh = SubResource("PlaneMesh_ap2ud")
+skeleton = NodePath("../..")
+
+[node name="LowerLeftLight" type="MeshInstance3D" parent="Headlight" unique_id=1592984605]
+transform = Transform3D(0.060533922, 0, 0, 0, -2.1855689e-08, -0.029999806, 0, 0.49999994, -1.3113332e-09, 0.7017218, 0.6071494, 0.003775064)
+mesh = SubResource("PlaneMesh_ap2ud")
+skeleton = NodePath("../..")

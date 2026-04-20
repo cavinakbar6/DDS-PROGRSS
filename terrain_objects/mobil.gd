@@ -4,8 +4,9 @@ extends Node3D
 @onready var collision: CollisionShape3D = $StaticBody3D/CollisionShape3D
 @onready var hitbox: Area3D = $Area3D
 @onready var hitbox_shape: CollisionShape3D = $Area3D/CollisionShape3D
-@export var damage: float = 50.0
+@onready var headlight: Area3D = $Headlight
 
+@export var damage: float = 50.0
 @export var spawn_chance: float = 0.5
 @export var horn_distance: float = 60.0
 @export var trigger_distance: float = 15.0 
@@ -13,13 +14,15 @@ extends Node3D
 var player: Node3D
 var has_passed: bool = false
 var has_horned: bool = false
+var day_night: Node = null
 
 @export var horn_sounds: Array[AudioStream] = []
 @export var spawn_x_range: Vector2 = Vector2(-1, 1)
 
 func _ready() -> void:
-	player = get_node_or_null("/root/World/Player")
 	add_to_group("ObstacleObjects")
+	player = get_node_or_null("/root/World/Player")
+	day_night = get_node_or_null("/root/World/DirectionalLight3D")
 	var aabb = mesh.get_aabb()
 	var size = aabb.size
 	var bottom = aabb.position
@@ -50,6 +53,12 @@ func get_damage() -> float:
 	return damage
 
 func _process(_delta: float) -> void:
+	if day_night:
+		if day_night.is_daytime():
+			headlight.visible = false
+		else:
+			headlight.visible = true
+		
 	if player:
 		if not has_horned and global_position.z > (player.global_position.z - horn_distance):
 			has_horned = true

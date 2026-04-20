@@ -70,7 +70,7 @@ loop_end = 99888
 environment = SubResource("Environment_y0213")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1080771480]
-transform = Transform3D(1, 0, 0, 0, 0.30237, 0.953191, 0, -0.953191, 0.30237, 0, 0, -0.701444)
+transform = Transform3D(1, 0, 0, 0, 0.76604474, 0.6427878, 0, -0.6427878, 0.76604474, 0, 0, -0.701444)
 shadow_enabled = true
 script = ExtResource("17_daynight")
 

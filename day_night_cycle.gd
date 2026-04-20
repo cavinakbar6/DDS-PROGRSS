@@ -4,7 +4,7 @@ extends DirectionalLight3D
 @export var transition_duration: float = 3.0
 @export var night_duration: float = 40.0
 
-# 🔥 kontrol gelap malam
+# kontrol gelap malam
 @export var night_min_intensity: float = 0.2
 
 var max_energy: float = 1.0
@@ -25,7 +25,7 @@ func _process(delta: float) -> void:
 	
 	var total_cycle = day_duration + transition_duration + night_duration + transition_duration
 	var t = fmod(time_passed, total_cycle)
-
+	
 	var intensity_factor = 0.0
 	var current_color = color_day
 	
@@ -85,3 +85,9 @@ func _process(delta: float) -> void:
 		if env.fog_enabled:
 			env.fog_light_color = current_color
 			env.fog_density = lerp(0.002, 0.01, 1.0 - intensity_factor)
+
+func is_daytime() -> bool:
+	var total_cycle = day_duration + transition_duration + night_duration + transition_duration
+	var t = fmod(time_passed, total_cycle)
+	
+	return t < day_duration
