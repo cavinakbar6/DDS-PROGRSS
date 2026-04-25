@@ -23,6 +23,7 @@ config/features=PackedStringArray("4.6", "Forward Plus")
 [autoload]
 
 Settings="*res://settings_manager.gd"
+HighScoreManager="*res://high_score_manager.gd"
 
 [display]
 

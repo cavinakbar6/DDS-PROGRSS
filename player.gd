@@ -13,7 +13,7 @@ const BATAS_JALAN_X = 4.0 # Batas kiri/kanan. Sesuaikan nilai 4.0 ini!
 
 var score: int = 0
 var game_is_over: bool = false
-var high_score: int = 0 # Skor tertinggi hanya berlaku untuk sesi permainan saat ini
+# High score sekarang disimpan secara persisten via HighScoreManager (autoload)
 
 # [BARU] Variabel Status Game
 var is_game_started: bool = false # Untuk layar "Mulai"
@@ -360,8 +360,7 @@ func show_game_over_ui() -> void:
 	if game_is_over:
 		return
 	game_is_over = true
-	if score > high_score:
-		high_score = score
+	HighScoreManager.try_set_high_score(score)
 		
 	# Reset status kerusakan
 	damage_auto_turn_dir = 0
@@ -416,7 +415,7 @@ func show_game_over_ui() -> void:
 		tw3.tween_property(final_score_label, "modulate", Color(1, 1, 1, 1), 0.5)
 	
 	if is_instance_valid(high_score_label):
-		high_score_label.text = "Highest Score: %d" % high_score
+		high_score_label.text = "Highest Score: %d" % HighScoreManager.get_high_score()
 	
 	# Phase 4: Tombol fade in
 	var restart_btn = game_over_ui.get_node_or_null("RestartButton")
@@ -584,6 +583,7 @@ func receive_hit(type: String, obj: Node3D) -> void:
 		elif wanted_stars >= MAX_WANTED_STARS:
 			# BUSTED! Trigger dramatic animation
 			game_is_over = true
+			HighScoreManager.try_set_high_score(score)
 			if is_instance_valid(wanted_ui_instance) and wanted_ui_instance.has_method("play_busted"):
 				wanted_ui_instance.play_busted()
 			if terrain_controller:
