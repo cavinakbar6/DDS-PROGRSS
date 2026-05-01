@@ -1,25 +1,16 @@
-# =========================================================================
-# Player.gd (HASIL PENGGABUNGAN + FITUR EUFORIA + BATAS JALAN)
-# Script ini menggabungkan semua fitur dari kedua versi yang diberikan,
-# dan MENGGANTI sistem mabuk standar dengan sistem EUFORIA berbasis level.
-# =========================================================================
 extends CharacterBody3D
 
 # =============================================================
 # KONSTANTA DAN VARIABEL UMUM
 # =============================================================
-const SPEED = 5.0
-const BATAS_JALAN_X = 4.0 # Batas kiri/kanan. Sesuaikan nilai 4.0 ini!
+const SPEED = 5.0           # kecepatan awal
+const BATAS_JALAN_X = 4.0   # batas lebar jalan kiri/kanan
 
 var score: int = 0
 var game_is_over: bool = false
 # High score sekarang disimpan secara persisten via HighScoreManager (autoload)
 
-# [BARU] Variabel Status Game
-var is_game_started: bool = false # Untuk layar "Mulai"
-
-# [DIUBAH] Variabel Mabuk Asli Dihapus/Diganti
-# ... (sistem Euforia tidak berubah) ...
+var is_game_started: bool = false    # Untuk layar "Mulai"
 
 # =============================================================
 # FITUR CAR HEALTH & MECHANICAL FAILURE
@@ -138,7 +129,7 @@ func _ready() -> void:
 	debug_camera.current = false
 	
 	# [BARU] Jeda game saat pertama kali dimulai
-	get_tree().paused = true
+	#get_tree().paused = true
 	
 	await get_tree().process_frame
 	
@@ -328,7 +319,7 @@ func _physics_process(delta: float) -> void:
 # [BARU] Fungsi untuk memulai game
 func start_game() -> void:
 	is_game_started = true       # Tandai bahwa game sudah dimulai
-	get_tree().paused = false    # Lanjutkan game
+	#get_tree().paused = false    # Lanjutkan game
 	
 	terrain_controller.enable_spawning()
 	

@@ -25,7 +25,7 @@ var terrain_velocity: float = 0.0
  
 # === PENGATURAN DARI SKRIP KEDUA ===
 @export var object_spawn_chance: float = 0.25
-@export var num_terrain_blocks = 10
+@export var num_terrain_blocks = 20
 
 signal game_over_signal 
 
@@ -43,13 +43,17 @@ var allow_spawn: bool = false           # dikontrol dari Player.gd
 # =============================================================
 # PENGATURAN SCENERY
 # =============================================================
-@export var scenery_spawn_chance: float = 10000000     # seberapa sering muncul pohon
-@export var scenery_min_distance: float = 25.0    # jarak minimal dari player
-@export var scenery_max_distance: float = 500.0    # jarak maksimal dari player
-@export var scenery_side_offset: float = 15.0     # jarak dari jalan utama ke kiri/kanan
+@export var scenery_spawn_chance: float = 1.0      # seberapa sering muncul pohon (skala 0.0 - 1.0)
+@export var scenery_min_distance: float = 500.0     # jarak minimal dari player
+@export var scenery_max_distance: float = 1000.0    # jarak maksimal dari player
+@export var scenery_side_offset: float = 9.0      # jarak dari jalan utama ke kiri/kanan
+@export var scenery_x_max_distance: float = 50.0   # jarak max spawn x
+@export var scenery_multiplier: float = 100.0      # multiplier spawn chance
 
 var scenery_always_active: bool = true
 
+# Building generator essentials
+@export var building_generator: BuildingGenerator
 
 
 func _ready() -> void:
@@ -57,15 +61,25 @@ func _ready() -> void:
 
 	# Atur kecepatan awal dari logika akselerasi
 	terrain_velocity = initial_velocity
-
-	_init_blocks(num_terrain_blocks)
+	
 	_load_terrain_scenes("res://terrain_objects",TerrainObjects)
 	_load_scenery_scenes("res://terrain_scenery", TerrainScenery)
+	building_generator.load_buildings("res://terrain_buildings")
+	print("Building generator:", building_generator)
+	
+	_init_blocks(num_terrain_blocks)
 
 
 func _physics_process(delta: float) -> void:
 	if game_over:
 		return
+	
+	if not allow_spawn:
+		# Tetap jalankan building_generator agar bangunan muncul/animasi idle berjalan,
+		# tapi beri kecepatan 0 agar tidak bergerak.
+		if building_generator:
+			building_generator.update_buildings(delta, 0.0)
+		return # Hentikan eksekusi di sini agar tanah dan obstacle tidak jalan
 	
 	# LOGIKA AKSELERASI
 	if terrain_velocity < max_velocity:
@@ -82,7 +96,10 @@ func _physics_process(delta: float) -> void:
 	_progress_terrain(delta)
 	_progress_obstacles(delta)
 	_progress_scenery(delta)
-
+	
+	if building_generator:
+		building_generator.update_buildings(delta, terrain_velocity)
+	
 	# 🚫 Hanya hentikan *spawn baru*, bukan gerakan
 	if not allow_spawn:
 		return
@@ -91,6 +108,7 @@ func _physics_process(delta: float) -> void:
 # Dipanggil oleh Player.gd saat game dimulai
 func enable_spawning() -> void:
 	allow_spawn = true
+
 
 func _trigger_game_over() -> void:
 	if game_over:
@@ -134,6 +152,7 @@ func _progress_obstacles(delta: float) -> void:
 				elif obstacle.is_in_group("ObstacleObjects"):
 					player.receive_hit("damage", obstacle)
  
+
 func _progress_scenery(delta: float) -> void:
 	for tree in active_scenery:
 		if not is_instance_valid(tree):
@@ -149,6 +168,7 @@ func _progress_scenery(delta: float) -> void:
 func _pick_random_block() -> PackedScene:
 	return TerrainBlocks.pick_random()
  
+
 func _pick_random_object() -> PackedScene:
 	var candidates: Array = []
 	for obj_scene in TerrainObjects:
@@ -162,6 +182,7 @@ func _pick_random_object() -> PackedScene:
 		return null
 	return candidates.pick_random()
  
+
 func _init_blocks(number_of_blocks: int) -> void:
 	for block_index in range(number_of_blocks):
 		var block = _pick_random_block().instantiate()
@@ -171,9 +192,17 @@ func _init_blocks(number_of_blocks: int) -> void:
 			_append_to_far_edge(terrain_belt[block_index - 1], block)
 		add_child(block)
 		terrain_belt.append(block)
+		
 		if allow_spawn and randf() < object_spawn_chance:
 			_spawn_object_on_block(block)
-
+		
+		for i in range(scenery_multiplier):
+			if scenery_always_active and randf() < scenery_spawn_chance:
+				_spawn_scenery(block)
+		
+		if building_generator and not block.has_meta("has_building"):
+			building_generator.spawn_buildings_on_block(block)
+			block.set_meta("has_building", true)
 
 
 func _progress_terrain(delta: float) -> void:
@@ -193,8 +222,12 @@ func _progress_terrain(delta: float) -> void:
 		first_terrain.queue_free()
 		if allow_spawn and randf() < object_spawn_chance:
 			_spawn_object_on_block(block)
-		if scenery_always_active and randf() < scenery_spawn_chance:
-			_spawn_scenery(block)
+		for i in range(scenery_multiplier):
+			if scenery_always_active and randf() < scenery_spawn_chance:
+				_spawn_scenery(block)
+		if building_generator and not block.has_meta("has_building"):
+			building_generator.spawn_buildings_on_block(block)
+			block.set_meta("has_building", true)
 
  
 func get_block_length(block: Node3D) -> float:
@@ -215,6 +248,7 @@ func _append_to_far_edge(target_block: Node3D, appending_block: Node3D) -> void:
 	var target_len = get_block_length(target_block)
 	appending_block.position.z = target_block.position.z - target_len
  
+
 func _spawn_object_on_block(block: Node3D) -> void:
 	var obj_scene = _pick_random_object()
 	if obj_scene == null: 
@@ -248,21 +282,27 @@ func _spawn_object_on_block(block: Node3D) -> void:
 	add_child(obj)
 	active_obstacles.append(obj)
  
+
 func _spawn_scenery(block: Node3D) -> void:
 	if TerrainScenery.is_empty():
 		return
 	var scene = TerrainScenery.pick_random()
 	var tree = scene.instantiate()
 
-	# posisi relatif terhadap player
-	var player = get_node_or_null("/root/World/Player")
-	if player:
-		var side = sign(randf_range(-1.0, 1.0))
-		var x_offset = scenery_side_offset * side + randf_range(-5.0, 5.0)
-		var z_offset = -randf_range(scenery_min_distance, scenery_max_distance)
-		tree.position = Vector3(player.position.x + x_offset, 0.0, player.position.z + z_offset)
-	else:
-		tree.position = block.position + Vector3(randf_range(-30, 30), 0, -randf_range(30, 200))
+	var center_x = block.position.x
+
+	var side = 1 if randf() > 0.5 else -1
+	var x_offset = (scenery_side_offset + randf_range(0.0, scenery_x_max_distance)) * side
+	
+	# Ambil panjang block agar scenery terdistribusi merata di sepanjang block tersebut
+	var block_length = get_block_length(block)
+	if block_length == 0.0:
+		block_length = 100.0 # Fallback jika gagal mendapat ukuran blok
+		
+	var z_offset = -randf_range(0.0, block_length)
+
+	# Terapkan posisi: Z mengikuti posisi blok saat ini
+	tree.position = Vector3(center_x + x_offset, 0.0, block.position.z + z_offset)
 
 	add_child(tree)
 	active_scenery.append(tree)
@@ -277,6 +317,7 @@ func _load_terrain_scenes(target_path: String, target_array: Array) -> void:
 		if scene_path.ends_with(".tscn"):
 			print("Loading:", target_path + "/" + scene_path)
 			target_array.append(load(target_path + "/" + scene_path))
+
 
 func _load_scenery_scenes(target_path: String, target_array: Array) -> void:
 	var dir = DirAccess.open(target_path)

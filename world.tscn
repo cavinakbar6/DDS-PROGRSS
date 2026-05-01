@@ -21,6 +21,7 @@
 [ext_resource type="Texture2D" uid="uid://nhwrka35b5lk" path="res://asset/gamespace_dashboard.png" id="15_hiqwa"]
 [ext_resource type="PackedScene" uid="uid://mas2bqeaeobp" path="res://pause_menu.tscn" id="16_pausemenu"]
 [ext_resource type="Script" uid="uid://by1jkd7ffhsu3" path="res://day_night_cycle.gd" id="17_daynight"]
+[ext_resource type="Script" uid="uid://di1gals2clhjv" path="res://building_generator.gd" id="22_wukud"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_om122"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -108,7 +109,7 @@ surface_material_override/0 = SubResource("StandardMaterial3D_dwbse")
 [node name="CameraDebug" type="Camera3D" parent="Player" unique_id=1177903044]
 transform = Transform3D(0.80696, 0.201999, -0.554988, 0, 0.939693, 0.34202, 0.590606, -0.275997, 0.758295, -6.29213, 5.0546, 6.18968)
 fov = 80.0
-far = 60.0
+far = 500.0
 
 [node name="Audio" type="Node3D" parent="Player" unique_id=1684399602]
 process_mode = 1
@@ -135,9 +136,10 @@ autoplay = true
 [node name="GameOverMusic" type="AudioStreamPlayer" parent="Player/Audio" unique_id=888232479]
 stream = ExtResource("7_wse8f")
 
-[node name="TerrainController" parent="." unique_id=947274155 instance=ExtResource("1_wvryj")]
+[node name="TerrainController" parent="." unique_id=947274155 node_paths=PackedStringArray("building_generator") instance=ExtResource("1_wvryj")]
 initial_velocity = 40.0
 max_velocity = 70.0
+building_generator = NodePath("../BuildingGenerator")
 
 [node name="DashboardLayer" type="CanvasLayer" parent="." unique_id=79425635]
 
@@ -314,10 +316,6 @@ process_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 0.0
-offset_bottom = 0.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 0)
@@ -404,6 +402,9 @@ grow_horizontal = 2
 texture = ExtResource("13_hiqwa")
 
 [node name="PauseMenu" parent="." unique_id=2088050157 instance=ExtResource("16_pausemenu")]
+
+[node name="BuildingGenerator" type="Node3D" parent="." unique_id=1115005947]
+script = ExtResource("22_wukud")
 
 [connection signal="pressed" from="GameOverUI/ColorRect/RestartButton" to="Player" method="_on_restart_button_pressed"]
 [connection signal="pressed" from="GameOverUI/ColorRect/MenuButton" to="Player" method="_on_main_menu_button_pressed"]
